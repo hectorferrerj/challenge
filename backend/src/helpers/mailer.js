@@ -2,11 +2,10 @@ const nodemailer = require("nodemailer")
 
 const createTransporter = () => {
   const transport = nodemailer.createTransport({
-    host: "smtp.mailtrap.io",
-    port: 2525,
+    service: "Gmail",
     auth: {
-      user: "a0517202a523af",
-      pass: "9bd351ff8262a8",
+      user: "challenge.test.main@gmail.com",
+      pass: "tujnedbqkbrlercu",
     },
   })
 
@@ -18,31 +17,32 @@ const sendMails = async (newsletter, recipients) => {
 
   for (let recipient of recipients) {
     const emailBody = {
-      from: "Stori Newsletter",
+      from: "Stori Newsletter <newsletter@stori.com>",
       subject: `¡Han llegado las nuevas novedades para ti ${recipient.name}, no te las pierdas!`,
       attachments: [
         {
-          filename: newsletter.file,
+          filename: newsletter.filename,
           path: newsletter.url,
         },
       ],
       html: ` 
-            <div style="width: 100%; margin: auto; background-color: #00baab">
+            <div style="width: 1000px; margin: auto; background-color: #00baab">
                 <div
                     style="
                     background-color: #00baab;
-                    display: flex;
-                    justify-content: center;
-                    flex-direction: column;
+                    display: table-row;
+                    width: 600px;
+                    text-align: center;
                     "
                 >
-                    <div style="align-self: center">
-                    <img
-                        src="https://blog.storicard.com/wp-content/uploads/2019/07/stori.logo-horizontal-03.png"
-                        alt="stori_logo"
-                    />
+                    <div style="padding-top: 2rem; display: table-row;">
+                      <img 
+                          style="width: 100px; padding: 1rem;"
+                          src="https://blog.storicard.com/wp-content/uploads/2019/07/stori.logo-horizontal-03.png"
+                          alt="stori_logo"
+                      />
                     </div>
-                    <div style="align-self: center; padding-top: 6rem; width: 39rem">
+                    <div style="display: table-row; padding-top: 6rem; width: 39rem">
                     <h1
                         style="
                         margin: 0;
@@ -55,14 +55,13 @@ const sendMails = async (newsletter, recipients) => {
                         <strong>Una Tarjeta de Crédito a tu Medida!</strong>
                     </h1>
                     </div>
-                    <div style="align-self: center">
+                    <div style="display: table-row;">
                     <p
                         style="
                         background-color: #bdffa1;
                         font-family: Arial, Helvetica Neue, Helvetica, sans-serif;
                         font-size: 3.6em;
                         font-style: normal;
-                        margin: 16px 0;
                         text-align: center;
                         "
                     >
@@ -79,38 +78,36 @@ const sendMails = async (newsletter, recipients) => {
                         ¡Llegaron las nuevas novedades!
                     </h2>
                     <img
-                        style="margin-left: 10%"
-                        src="https://www.storicard.com/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fmobile-card-desktop.deda4c78.webp&w=750&q=100"
-                        alt="stori_logo"
+                      style="width: 400px;"
+                      src="https://www.storicard.com/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fmobile-card-desktop.deda4c78.webp&w=750&q=100"
+                      alt="stori_logo"
                     />
-
                     <p
                         style="
                         font-family: Arial, Helvetica Neue, Helvetica, sans-serif;
-                        font-size: 2.8em;
-                        width: 52rem;
+                        font-size: 2em;
                         text-align: center;
                         "
                     >
                         Para visualizar más información descarga el newsletter adjunto
                     </p>
                     </div>
-                    <div style="align-self: center">
+                    <div style="display: table-row;">
                     <p
                         style="
                         font-family: Arial, Helvetica Neue, Helvetica, sans-serif;
-                        font-size: 1.8em;
+                        font-size: 1em;
                         line-height: 1.5em;
-                        padding: 0;
-                        margin: 0 auto 1.25em;
+                        padding-top: 1rem;
+                        padding-bottom: 2rem;
                         text-align: center;
                         "
                     >
                         Si ya no deseas recibir esta información da click en
                         <a
-                        href="http://localhost:80/api/unsubscribe?userOId=${recipient.id}&newsletterOId=${newsletter.id}"
+                        href="http://localhost:3001/api/recipient-unsubscribe?_id=${recipient._id}&newsletter_oid=${newsletter._id}"
                         >
-                        Cancelar Subscripción</a
+                        Anular Subscripción</a
                         >
                     </p>
                     </div>
@@ -120,7 +117,7 @@ const sendMails = async (newsletter, recipients) => {
             `,
     }
     emailBody.to = recipient.email
-    const response = await transporter.sendMai(emailBody)
+    const response = await transporter.sendMail(emailBody)
     console.log("Message send: %s", response.messageId)
   }
   return
