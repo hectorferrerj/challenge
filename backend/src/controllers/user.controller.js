@@ -4,7 +4,7 @@ const User = require("../models/user.model")
 class UserController {
   async userLogin(req, res, next) {
     const { email, password } = req.body
-    console.log('login', req.body);
+  
     try {
       const user = await User.find({ email, password })
       if (!user.length) {

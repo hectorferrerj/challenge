@@ -3,6 +3,7 @@ const mongoose = require("mongoose")
 const cors = require("cors")
 
 const userRoutes = require('./routes/user.routes')
+const recipientRoutes = require('./routes/recipient.routes')
 
 require("dotenv").config()
 
@@ -36,6 +37,7 @@ app.use(express.json())
 // });
 
 app.use('/stori/api',userRoutes)
+app.use('/stori/api',recipientRoutes)
 
 app.listen(port, () => {
   console.log(`Stori Server listening on port ${port}`)

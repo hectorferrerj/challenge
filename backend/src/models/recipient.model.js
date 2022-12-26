@@ -19,13 +19,10 @@ const recipientSchema = new mongoose.Schema(
       required: true,
       unique: true,
     },
-    newsletters: {
-      type: Array,
-      isSubscribe: { type: Boolean },
-      name: { type: String },
-      required: false,
-      default: [],
-    },
+    newsletters: [{
+      isSubscribe: { type: Boolean, default: true },
+      newsletter_oid: { type: String },
+    }],
   },
   { collection: "recipients" }
 )
