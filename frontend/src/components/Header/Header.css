@@ -1,0 +1,13 @@
+.header-container {
+    height: 5rem;
+    color: aliceblue;
+    display: flex;
+    align-items: center;
+    background: #fc8da7;
+    box-shadow: 0 0.2rem 0.5rem rgb(139, 134, 134);
+    justify-content: center;
+}
+
+.header-text {
+    font-size: 2rem;
+}
