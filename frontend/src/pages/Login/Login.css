@@ -1,0 +1,15 @@
+.login-container {
+  padding-top: 5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.card {
+  width: 25%;
+}
+
+.input-container {
+  align-items: left;
+}
