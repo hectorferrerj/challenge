@@ -11,9 +11,11 @@ class UserController {
         const httpError = new HttpError("Invalid user or password", 401)
         return next(httpError)
       }
-
+      let userFound = user.shift();
+      userFound['password'] = '';
+      
       return res.status(200).json({
-        data: user.shift().name,
+        data: userFound,
       })
     } catch (e) {
       const error = new HttpError("Error on get user", 500)

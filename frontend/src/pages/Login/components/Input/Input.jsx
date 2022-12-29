@@ -1,16 +1,19 @@
 import React from "react"
 import "./Input.css"
 
-const Input = ({ attribute, handleChange, params }) => {
+const Input = ({ attribute, handleChange, handleBlur }) => {
   return (
     <div className="input-container">
       <input
-        id={attribute.id}
+        arial-label={attribute.label}
         name={attribute.name}
         placeholder={attribute.placeholder}
         type={attribute.type}
-        onChange={(e)=> handleChange(e.target.name, e.target.value)}
-        className="input"
+        value={attribute.value}
+        onChange={(e) => handleChange(e)}
+        onBlur={(e) => handleBlur(e)}
+        className={`input ${attribute.className}`}
+        
       />
     </div>
   )
