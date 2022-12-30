@@ -1,0 +1,33 @@
+.newsletter-container {
+  padding: 3rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+.newsletter-card {
+  width: 30rem;
+  text-align: center;
+}
+
+.newsletter-label {
+  margin: 1rem;
+}
+
+.file-form-container {
+  text-align: center;
+}
+
+.file-form {
+  padding: 1rem;
+}
+
+.back-button {
+  width: 15rem;
+  margin: 1rem;
+}
+
+.table-data {
+ width: 30rem;
+}
