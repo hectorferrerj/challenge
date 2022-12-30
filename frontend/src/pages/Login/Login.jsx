@@ -1,9 +1,9 @@
 import React, { useState, useContext } from "react"
 import axios from "axios"
 import "./Login.css"
-import Input from "./components/Input/Input"
-import Label from "./components/Label/Label"
-import Title from "./components/Title/Title"
+import Input from "../../components/Input/Input"
+import Label from "../../components/Label/Label"
+import Title from "../../components/Title/Title"
 import Button from "../../components/Button/Button"
 import Card from "../../components/Card/Card"
 
@@ -11,7 +11,7 @@ import { useLoginValidators } from "./hooks/useLogin.hook"
 import { LoginContext } from "../../context/login-context"
 
 const Login = () => {
-  const authentication = useContext(LoginContext);
+  const authentication = useContext(LoginContext)
   const [form, setForm] = useState({
     email: "",
     password: "",
@@ -24,30 +24,33 @@ const Login = () => {
       [field]: e.target.value,
     }
     setForm(nextFormState)
-    if (errors[field].dirty) 
+    if (errors[field].dirty)
       validateForm({
         form: nextFormState,
         errors,
         field,
-      })    
+      })
   }
-
 
   const login = async () => {
     const { isValid } = validateForm({ form, errors, forceTouchErrors: true })
     if (!isValid) return
     const req = {
       email: form.email,
-      password: form.password
-    };
+      password: form.password,
+    }
 
-    await axios.post('http://localhost:3008/stori/api/login', req).then((user) => {
-      authentication.login(user.data._id);
-      window.location = '/main';
-      }).catch((e) => {
-        alert('Email o Contraseña incorrecta verifique información e intente de nuevo')
-      }
-      )
+    await axios
+      .post("http://localhost:3008/stori/api/login", req)
+      .then((user) => {
+        authentication.login(user.data._id)
+        window.location = "/main"
+      })
+      .catch((e) => {
+        alert(
+          "Email o Contraseña incorrecta verifique información e intente de nuevo"
+        )
+      })
   }
 
   const handlerLogin = (event) => {
@@ -59,7 +62,7 @@ const Login = () => {
     <div className="login-container">
       <Card className="card">
         <Title text="Iniciar sesión" />
-        <form action="" onSubmit={handlerLogin}>
+        <form onSubmit={handlerLogin}>
           <div className="input-container">
             <Label className="input-label" text="Email" />
             <Input
@@ -93,7 +96,10 @@ const Login = () => {
             ) : null}
           </div>
           <div>
-            <Button type="submit" isDisabled={errors.email.error || errors.password.error}>
+            <Button
+              type="submit"
+              isDisabled={errors.email.error || errors.password.error}
+            >
               {"Iniciar sesión"}
             </Button>
           </div>
