@@ -1,0 +1,19 @@
+.massive-container {
+    width: 30rem;
+}
+
+.image-container {
+  text-align: center;
+}
+
+.image {
+  width: 250px;
+}
+
+.file-form-container {
+  text-align: center;
+}
+
+.file-form {
+  padding: 1rem;
+}
