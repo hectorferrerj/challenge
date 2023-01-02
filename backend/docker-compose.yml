@@ -6,11 +6,11 @@ services:
     restart: always
     build: .
     ports:
-      -  "8080:3000"
+      -  "3008:3000"
     links:
       - mongo
   mongo:
     container_name: stori-db
     image: mongo
     ports:
-      -  "27018:27017"
+      -  "27017:27017"
