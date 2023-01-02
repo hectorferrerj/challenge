@@ -11,3 +11,39 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+
+.input {
+  width: -webkit-fill-available;
+  font: inherit;
+  border: 1px solid #ff9fdc6c;
+  background: #ff9fdc13;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  margin-top: 0.5rem;
+  opacity: 1;
+  color: gray;
+}
+
+.input:focus {
+  outline: none;
+  border: 1px solid #ff47bc;
+  background: #ff9fdc13;
+}
+
+.input::placeholder {
+  opacity: 0.5;
+  display: block;
+}
+
+.input-error {
+  border: 1px solid #e11d48 !important;
+}
+
+.input-container {
+  align-items: left;
+}
+
+.error-text {
+  color: #b40e0e;
+}
