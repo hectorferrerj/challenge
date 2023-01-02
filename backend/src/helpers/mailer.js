@@ -12,19 +12,13 @@ const createTransporter = () => {
   return transport
 }
 
-const sendMails = async (newsletter, recipients) => {
+const sendMails = async (newsletter, recipients, unsubscribeOid) => {
   const transporter = createTransporter()
-
   for (let recipient of recipients) {
     const emailBody = {
       from: "Stori Newsletter <newsletter@stori.com>",
       subject: `¡Han llegado las nuevas novedades para ti ${recipient.name}, no te las pierdas!`,
-      attachments: [
-        {
-          filename: newsletter.filename,
-          path: newsletter.url,
-        },
-      ],
+      attachments: newsletter,
       html: ` 
             <div style="width: 1000px; margin: auto; background-color: #00baab">
                 <div
@@ -105,7 +99,7 @@ const sendMails = async (newsletter, recipients) => {
                     >
                         Si ya no deseas recibir esta información da click en
                         <a
-                        href="http://localhost:3001/api/recipient-unsubscribe?_id=${recipient._id}&newsletter_oid=${newsletter._id}"
+                        href="http://localhost:3008/stori/api/recipient-unsubscribe?_id=${recipient._id}&newsletter_oid=${unsubscribeOid}"
                         >
                         Anular Subscripción</a
                         >

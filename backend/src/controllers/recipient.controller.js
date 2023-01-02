@@ -24,7 +24,7 @@ class RecipientController {
       name,
       lastName,
       email,
-      newsletters: newsletters || []
+      newsletters: newsletters || [],
     })
     try {
       await recipientCreated.save()
@@ -36,24 +36,18 @@ class RecipientController {
       return next(recipientSaveError)
     }
 
-    return res.status(200).json({
-      data: recipientCreated,
-    })
+    return res.status(200).json(recipientCreated)
   }
 
   async createMassiveRecipient(req, res, next) {
     let recipientCreated = []
     let recipientSchema
     const { recipients } = req.body
-
-    console.log('Recipients', recipients)
-
     try {
       let recipientsDuplicated = []
 
       for (let recipient of recipients) {
         let recipientFound = await Recipient.findOne({ email: recipient.email })
-        console.log('RecipientsFound', recipientFound);
         if (recipientFound) recipientsDuplicated.push(recipientFound.email)
       }
 
@@ -75,7 +69,7 @@ class RecipientController {
         name: recipientToSave.name,
         lastName: recipientToSave.lastName,
         email: recipientToSave.email,
-        newsletters: recipientToSave.newsletters || []
+        newsletters: recipientToSave.newsletters || [],
       })
 
       try {
@@ -90,17 +84,13 @@ class RecipientController {
       }
     }
 
-    return res.status(200).json({
-      data: recipientCreated,
-    })
+    return res.status(200).json(recipientCreated)
   }
 
   async getRecipient(req, res, next) {
     try {
       const recipients = await Recipient.find()
-      return res.status(200).json({
-        recipients,
-      })
+      return res.status(200).json(recipients)
     } catch (err) {
       const recipientError = new HttpError("Get recipients failed " + err, 500)
       return next(recipientError)
@@ -110,33 +100,40 @@ class RecipientController {
   async addRecipientNewsletter(req, res, next) {
     const { _id, newsletter } = req.body
     try {
-      let recipientUpdate = await Recipient.updateOne(
-        { _id},
-        { $push: { newsletters: newsletter } }
+      let recipientUpdate = await Recipient.findByIdAndUpdate(
+        { _id },
+        { $push: { newsletters: newsletter } },
+        { new: true }
       )
       return res.status(200).json({
         data: recipientUpdate,
       })
-      
     } catch (error) {
-      const recipientUpdateError = new HttpError("Update recipient failed " + error, 500)
+      const recipientUpdateError = new HttpError(
+        "Update recipient failed " + error,
+        500
+      )
       return next(recipientUpdateError)
     }
   }
 
   async unsubscribe(req, res, next) {
     const { _id, newsletter_oid } = req.query
+    const newsletters = newsletter_oid.split(',')
     try {
-      let recipientUpdate = await Recipient.updateOne(
-        { _id, "newsletters.newsletter_oid": newsletter_oid },
-        { $set: { "newsletters.$.isSubscribe": false } }
+      let recipientUpdate = await Recipient.updateMany(
+        { _id},
+        { $set: { "newsletters.$[el].isSubscribe": false } },
+        { arrayFilters: [{"el.newsletter_oid": { $in: newsletters }}]}
       )
       return res.status(200).json({
         data: recipientUpdate,
       })
-      
     } catch (error) {
-      const recipientUpdateError = new HttpError("Update recipient failed " + error, 500)
+      const recipientUpdateError = new HttpError(
+        "Update recipient failed " + error,
+        500
+      )
       return next(recipientUpdateError)
     }
   }

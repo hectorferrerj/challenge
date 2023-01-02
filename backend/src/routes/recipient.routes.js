@@ -6,6 +6,6 @@ router.get("/recipients", RecipientController.getRecipient)
 router.post("/recipient", RecipientController.createRecipient)
 router.post("/recipients", RecipientController.createMassiveRecipient)
 router.put("/recipient-newsletter", RecipientController.addRecipientNewsletter)
-router.put("/recipient-unsubscribe", RecipientController.unsubscribe)
+router.get("/recipient-unsubscribe", RecipientController.unsubscribe)
 
 module.exports = router
