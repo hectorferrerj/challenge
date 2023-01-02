@@ -9,17 +9,3 @@
 .card {
   width: 25%;
 }
-
-.input-container {
-  align-items: left;
-}
-
-.input-error {
-  border: 1px solid #e11d48;
-}
-
-.input-error-message {
-  display: inline-block;
-  margin: 0.25rem 0 0 0;
-  color: #e11d48;
-}

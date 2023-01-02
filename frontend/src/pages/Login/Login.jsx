@@ -1,45 +1,47 @@
-import React, { useState, useContext } from "react"
+import React, { useContext } from "react"
 import axios from "axios"
 import "./Login.css"
-import Input from "../../components/Input/Input"
 import Label from "../../components/Label/Label"
 import Title from "../../components/Title/Title"
 import Button from "../../components/Button/Button"
 import Card from "../../components/Card/Card"
 
-import { useLoginValidators } from "./hooks/useLogin.hook"
 import { LoginContext } from "../../context/login-context"
+import { useInput } from "../../hooks/input.hook"
+
+const isRequired = (value) => value.trim() !== ''
+const isEmail = (value) => value.includes("@")
 
 const Login = () => {
   const authentication = useContext(LoginContext)
-  const [form, setForm] = useState({
-    email: "",
-    password: "",
-  })
-  const { errors, validateForm, onBlurField } = useLoginValidators(form)
-  const handleChange = (e) => {
-    const field = e.target.name
-    const nextFormState = {
-      ...form,
-      [field]: e.target.value,
-    }
-    setForm(nextFormState)
-    if (errors[field].dirty)
-      validateForm({
-        form: nextFormState,
-        errors,
-        field,
-      })
+
+  const {
+    value: enteredEmail,
+    isValid: enteredEmailIsValid,
+    hasError: emailInputHasError,
+    valueChangeHandler: emailChangeHandler,
+    inputBlurHandler: emailBlurHandler,
+  } = useInput(isEmail)
+
+  const {
+    value: enteredPassword,
+    isValid: enteredPasswordIsValid,
+    hasError: passwordInputHasError,
+    valueChangeHandler: passwordChangeHandler,
+    inputBlurHandler: passwordBlurHandler,
+  } = useInput(isRequired)
+
+  let formIsValid = false
+
+  if (enteredEmailIsValid && enteredPasswordIsValid) {
+    formIsValid = true
   }
 
   const login = async () => {
-    const { isValid } = validateForm({ form, errors, forceTouchErrors: true })
-    if (!isValid) return
     const req = {
-      email: form.email,
-      password: form.password,
+      email: enteredEmail,
+      password: enteredPassword,
     }
-
     await axios
       .post("http://localhost:3008/stori/api/login", req)
       .then((user) => {
@@ -55,8 +57,14 @@ const Login = () => {
 
   const handlerLogin = (event) => {
     event.preventDefault()
+    if (!enteredEmailIsValid) {
+      return
+    }
     login()
   }
+
+  const emailClasses = emailInputHasError ? "input input-error" : "input"
+  const passwordClasses = passwordInputHasError ? "input input-error" : "input"
 
   return (
     <div className="login-container">
@@ -65,41 +73,37 @@ const Login = () => {
         <form onSubmit={handlerLogin}>
           <div className="input-container">
             <Label className="input-label" text="Email" />
-            <Input
-              attribute={{
-                label: "email",
-                name: "email",
-                type: "text",
-                value: form.email,
-                placeholder: "Ingrese su email",
-              }}
-              handleChange={handleChange}
-              handleBlur={onBlurField}
+            <input
+              className={emailClasses}
+              id="email"
+              label="email"
+              name="email"
+              type="text"
+              placeholder="Ingrese su email"
+              value={enteredEmail}
+              onChange={emailChangeHandler}
+              onBlur={emailBlurHandler}
             />
-            {errors.email.dirty && errors.email.error ? (
-              <p className="input-error-message">{errors.email.message}</p>
-            ) : null}
+            {emailInputHasError && (
+              <p className="error-text">Ingrese un email valido</p>
+            )}
             <Label className="input-label" text="Contraseña" />
-            <Input
-              attribute={{
-                label: "password",
-                name: "password",
-                value: form.password,
-                type: "password",
-                placeholder: "Ingrese su contraseña",
-              }}
-              handleChange={handleChange}
-              handleBlur={onBlurField}
+            <input
+              className={passwordClasses}
+              id="password"
+              type="password"
+              label="Contraseña"
+              placeholder="********"
+              value={enteredPassword}
+              onChange={passwordChangeHandler}
+              onBlur={passwordBlurHandler}
             />
-            {errors.password.dirty && errors.password.error ? (
-              <p className="input-error-message">{errors.password.message}</p>
-            ) : null}
+            {passwordInputHasError && (
+              <p className="error-text">Ingrese contraseña</p>
+            )}
           </div>
           <div>
-            <Button
-              type="submit"
-              isDisabled={errors.email.error || errors.password.error}
-            >
+            <Button isDisabled={!formIsValid} type="submit">
               {"Iniciar sesión"}
             </Button>
           </div>
